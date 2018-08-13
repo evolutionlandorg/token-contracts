@@ -28,20 +28,6 @@ contract COO is DSToken("COO"), ERC223, Controlled {
         }
 
         success = super.transferFrom(_from, _to, _amount);
-
-        if (success && isContract(_to))
-        {
-            // ERC20 backward compatiability
-            if(!_to.call(bytes4(keccak256("tokenFallback(address,uint256)")), _from, _amount)) {
-                // do nothing when error in call in case that the _to contract is not inherited from ERC223ReceivingContract
-                // revert();
-                // bytes memory empty;
-
-                emit ReceivingContractTokenFallbackFailed(_from, _to, _amount);
-
-                // Even the fallback failed if there is such one, the transfer will not be revert since "revert()" is not called.
-            }
-        }
     }
 
     /*
