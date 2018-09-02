@@ -82,7 +82,7 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
         // Alerts the token controller of the transfer
         if (isContract(controller)) {
             if (!TokenController(controller).onTransfer(_from, _to, _amount))
-               throw;
+               revert();
         }
 
         success = super.transferFrom(_from, _to, _amount);
@@ -99,7 +99,7 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
         // Alerts the token controller of the transfer
         if (isContract(controller)) {
             if (!TokenController(controller).onTransfer(_from, _to, _amount))
-               throw;
+               revert();
         }
 
         require(super.transferFrom(_from, _to, _amount));
@@ -147,7 +147,7 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
         // Alerts the token controller of the approve function call
         if (isContract(controller)) {
             if (!TokenController(controller).onApprove(msg.sender, _spender, _amount))
-                throw;
+                revert();
         }
         
         return super.approve(_spender, _amount);
@@ -173,7 +173,7 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     /// @return True if the function call was successful
     function approveAndCall(address _spender, uint256 _amount, bytes _extraData
     ) returns (bool success) {
-        if (!approve(_spender, _amount)) throw;
+        if (!approve(_spender, _amount)) revert();
 
         ApproveAndCallFallBack(_spender).receiveApproval(
             msg.sender,
@@ -202,10 +202,10 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     ///  ether and creates tokens as described in the token controller contract
     function ()  payable {
         if (isContract(controller)) {
-            if (! TokenController(controller).proxyPayment.value(msg.value)(msg.sender))
-                throw;
+            if (! TokenController(controller).proxyPayment.value(msg.value)(msg.sender, msg.sig, msg.data))
+                revert();
         } else {
-            throw;
+            revert();
         }
     }
 

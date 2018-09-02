@@ -6,7 +6,7 @@ contract TokenController {
     /// @notice Called when `_owner` sends ether to the MiniMe Token contract
     /// @param _owner The address that sent the ether to create tokens
     /// @return True if the ether is accepted, false if it throws
-    function proxyPayment(address _owner) payable public returns (bool);
+    function proxyPayment(address _owner, bytes4 sig, bytes data) payable public returns (bool);
 
     /// @notice Notifies the controller about a token transfer allowing the
     ///  controller to react if desired
