@@ -6,6 +6,7 @@ import './TokenController.sol';
 import './Controlled.sol';
 import './ApproveAndCallFallBack.sol';
 import './ERC223.sol';
+import './ISmartToken.sol';
 
 contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     address public newOwner;
@@ -64,10 +65,10 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     function destroy(address _from, uint256 _amount) public auth stoppable {
         // do not require allowance
 
-        _balances[guy] = sub(_balances[guy], wad);
-        _supply = sub(_supply, wad);
-        emit Burn(guy, wad);
-        emit Transfer(_guy, 0, _wad);
+        _balances[_from] = sub(_balances[_from], _amount);
+        _supply = sub(_supply, _amount);
+        emit Burn(_from, _amount);
+        emit Transfer(_from, 0, _amount);
     }
 
     /// @notice Send `_amount` tokens to `_to` from `_from` on the condition it
