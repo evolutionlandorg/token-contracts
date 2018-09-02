@@ -7,10 +7,67 @@ import './Controlled.sol';
 import './ApproveAndCallFallBack.sol';
 import './ERC223.sol';
 
-contract RING is DSToken("RING"), ERC223, Controlled {
+contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
+    address public newOwner;
+    bool public transfersEnabled = true;    // true if transfer/transferFrom are enabled, false if not
+
+    // allows execution only when transfers aren't disabled
+    modifier transfersAllowed {
+        assert(transfersEnabled);
+        _;
+    }
 
     constructor() public {
         setName("Evolution Land Global Token");
+    }
+
+//////////
+// IOwned Methods
+//////////
+
+    /**
+        @dev allows transferring the contract ownership
+        the new owner still needs to accept the transfer
+        can only be called by the contract owner
+        @param _newOwner    new contract owner
+    */
+    function transferOwnership(address _newOwner) public auth {
+        require(_newOwner != owner);
+        newOwner = _newOwner;
+    }
+
+    /**
+        @dev used by a new owner to accept an ownership transfer
+    */
+    function acceptOwnership() public {
+        require(msg.sender == newOwner);
+        owner = newOwner;
+        newOwner = address(0);
+    }
+
+//////////
+// SmartToken Methods
+//////////
+    /**
+        @dev disables/enables transfers
+        can only be called by the contract owner
+        @param _disable    true to disable transfers, false to enable them
+    */
+    function disableTransfers(bool _disable) public auth {
+        transfersEnabled = !_disable;
+    }
+
+    function issue(address _to, uint256 _amount) public auth stoppable {
+        mint(_to, _amount);
+    }
+
+    function destroy(address _from, uint256 _amount) public auth stoppable {
+        // do not require allowance
+
+        _balances[guy] = sub(_balances[guy], wad);
+        _supply = sub(_supply, wad);
+        emit Burn(guy, wad);
+        emit Transfer(_guy, 0, _wad);
     }
 
     /// @notice Send `_amount` tokens to `_to` from `_from` on the condition it
@@ -20,7 +77,7 @@ contract RING is DSToken("RING"), ERC223, Controlled {
     /// @param _amount The amount of tokens to be transferred
     /// @return True if the transfer was successful
     function transferFrom(address _from, address _to, uint256 _amount
-    ) public returns (bool success) {
+    ) public transfersAllowed returns (bool success) {
         // Alerts the token controller of the transfer
         if (isContract(controller)) {
             if (!TokenController(controller).onTransfer(_from, _to, _amount))
@@ -28,20 +85,6 @@ contract RING is DSToken("RING"), ERC223, Controlled {
         }
 
         success = super.transferFrom(_from, _to, _amount);
-
-        if (success && isContract(_to))
-        {
-            // ERC20 backward compatiability
-            if(!_to.call(bytes4(keccak256("tokenFallback(address,uint256)")), _from, _amount)) {
-                // do nothing when error in call in case that the _to contract is not inherited from ERC223ReceivingContract
-                // revert();
-                // bytes memory empty;
-
-                emit ReceivingContractTokenFallbackFailed(_from, _to, _amount);
-
-                // Even the fallback failed if there is such one, the transfer will not be revert since "revert()" is not called.
-            }
-        }
     }
 
     /*
@@ -49,7 +92,7 @@ contract RING is DSToken("RING"), ERC223, Controlled {
      * Added support for the ERC 223 "tokenFallback" method in a "transfer" function with a payload.
      */
     function transferFrom(address _from, address _to, uint256 _amount, bytes _data)
-        public
+        public transfersAllowed
         returns (bool success)
     {
         // Alerts the token controller of the transfer
