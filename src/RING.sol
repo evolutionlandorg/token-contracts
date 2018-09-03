@@ -241,7 +241,7 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
     ///  sent tokens to this contract.
     /// @param _token The address of the token contract that you want to recover
     ///  set to 0 in case you want to extract ether.
-    function claimTokens(address _token) auth {
+    function claimTokens(address _token) public auth {
         if (_token == 0x0) {
             address(msg.sender).transfer(address(this).balance);
             return;
@@ -252,6 +252,11 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
         token.transfer(address(msg.sender), balance);
 
         emit ClaimedTokens(_token, address(msg.sender), balance);
+    }
+
+    function withdrawTokens(ERC20 _token, address _to, uint256 _amount) public auth
+    {
+        assert(_token.transfer(_to, _amount));
     }
 
 ////////////////
