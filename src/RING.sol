@@ -243,15 +243,15 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
     ///  set to 0 in case you want to extract ether.
     function claimTokens(address _token) auth {
         if (_token == 0x0) {
-            controller.transfer(address(this).balance);
+            address(msg.sender).transfer(address(this).balance);
             return;
         }
 
         ERC20 token = ERC20(_token);
         uint balance = token.balanceOf(this);
-        token.transfer(controller, balance);
+        token.transfer(address(msg.sender), balance);
 
-        emit ClaimedTokens(_token, controller, balance);
+        emit ClaimedTokens(_token, address(msg.sender), balance);
     }
 
 ////////////////
