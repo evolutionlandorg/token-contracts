@@ -12,6 +12,8 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     address public newOwner;
     bool public transfersEnabled = true;    // true if transfer/transferFrom are enabled, false if not
 
+    uint256 public cap;
+
     // allows execution only when transfers aren't disabled
     modifier transfersAllowed {
         assert(transfersEnabled);
@@ -69,6 +71,15 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
         _supply = sub(_supply, _amount);
         emit Burn(_from, _amount);
         emit Transfer(_from, 0, _amount);
+    }
+
+//////////
+// Cap Methods
+//////////
+    function changeCap(uint256 _newCap) public auth {
+        require(_newCap >= _supply);
+
+        cap = _newCap;
     }
 
     /// @notice Send `_amount` tokens to `_to` from `_from` on the condition it
@@ -154,6 +165,8 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
     }
 
     function mint(address _guy, uint _wad) auth stoppable {
+        require(add(_supply, _wad) <= cap);
+
         super.mint(_guy, _wad);
 
         emit Transfer(0, _guy, _wad);
