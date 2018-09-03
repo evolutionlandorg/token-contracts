@@ -3,14 +3,24 @@ pragma solidity ^0.4.23;
 import "ds-token/token.sol";
 import './ERC223ReceivingContract.sol';
 import './TokenController.sol';
-import './Controlled.sol';
 import './ApproveAndCallFallBack.sol';
 import './ERC223.sol';
 
-contract SIOO is DSToken("SIOO"), ERC223, Controlled {
+contract SIOO is DSToken("SIOO"), ERC223 {
+    address public controller;
 
     constructor() public {
         setName("Evolution Land Silicon");
+        controller = msg.sender;
+    }
+
+//////////
+// Controller Methods
+//////////
+    /// @notice Changes the controller of the contract
+    /// @param _newController The new controller of the contract
+    function changeController(address _newController) auth {
+        controller = _newController;
     }
 
     /// @notice Send `_amount` tokens to `_to` from `_from` on the condition it
@@ -155,11 +165,11 @@ contract SIOO is DSToken("SIOO"), ERC223, Controlled {
 // Safety Methods
 //////////
 
-    /// @notice This method can be used by the controller to extract mistakenly
+    /// @notice This method can be used by the owner to extract mistakenly
     ///  sent tokens to this contract.
     /// @param _token The address of the token contract that you want to recover
     ///  set to 0 in case you want to extract ether.
-    function claimTokens(address _token) onlyController {
+    function claimTokens(address _token) auth {
         if (_token == 0x0) {
             controller.transfer(address(this).balance);
             return;

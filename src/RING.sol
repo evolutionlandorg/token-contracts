@@ -3,16 +3,17 @@ pragma solidity ^0.4.23;
 import "ds-token/token.sol";
 import './ERC223ReceivingContract.sol';
 import './TokenController.sol';
-import './Controlled.sol';
 import './ApproveAndCallFallBack.sol';
 import './ERC223.sol';
 import './ISmartToken.sol';
 
-contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
+contract RING is DSToken("RING"), ERC223, ISmartToken {
     address public newOwner;
     bool public transfersEnabled = true;    // true if transfer/transferFrom are enabled, false if not
 
     uint256 public cap;
+
+    address public controller;
 
     // allows execution only when transfers aren't disabled
     modifier transfersAllowed {
@@ -22,6 +23,7 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
 
     constructor() public {
         setName("Evolution Land Global Token");
+        controller = msg.sender;
     }
 
 //////////
@@ -80,6 +82,15 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
         require(_newCap >= _supply);
 
         cap = _newCap;
+    }
+
+//////////
+// Controller Methods
+//////////
+    /// @notice Changes the controller of the contract
+    /// @param _newController The new controller of the contract
+    function changeController(address _newController) auth {
+        controller = _newController;
     }
 
     /// @notice Send `_amount` tokens to `_to` from `_from` on the condition it
@@ -226,11 +237,11 @@ contract RING is DSToken("RING"), ERC223, Controlled, ISmartToken {
 // Safety Methods
 //////////
 
-    /// @notice This method can be used by the controller to extract mistakenly
+    /// @notice This method can be used by the owner to extract mistakenly
     ///  sent tokens to this contract.
     /// @param _token The address of the token contract that you want to recover
     ///  set to 0 in case you want to extract ether.
-    function claimTokens(address _token) onlyController {
+    function claimTokens(address _token) auth {
         if (_token == 0x0) {
             controller.transfer(address(this).balance);
             return;
