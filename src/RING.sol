@@ -1,11 +1,11 @@
 pragma solidity ^0.4.23;
 
 import "ds-token/token.sol";
-import './ERC223ReceivingContract.sol';
-import './TokenController.sol';
-import './ApproveAndCallFallBack.sol';
-import './ERC223.sol';
-import './ISmartToken.sol';
+import '../node_modules/evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
+import '../node_modules/evolutionlandcommon/contracts/interfaces/TokenController.sol';
+import '../node_modules/evolutionlandcommon/contracts/interfaces/ApproveAndCallFallBack.sol';
+import '../node_modules/evolutionlandcommon/contracts/interfaces/ERC223.sol';
+import '../node_modules/evolutionlandcommon/contracts/interfaces/ISmartToken.sol';
 
 contract RING is DSToken("RING"), ERC223, ISmartToken {
     address public newOwner;

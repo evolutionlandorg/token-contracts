@@ -1,0 +1,27 @@
+{
+  "name": "evolutionlandtoken",
+  "version": "1.0.0",
+  "description": "Evolution Land ERC20 Token Contracts",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "evolutionlandcommon": "^1.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evolutionlandorg/token-contracts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evolutionlandorg/token-contracts/issues"
+  },
+  "homepage": "https://github.com/evolutionlandorg/token-contracts#readme"
+}
