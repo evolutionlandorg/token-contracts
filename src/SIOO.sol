@@ -105,6 +105,19 @@ contract SIOO is DSToken("SIOO"), ERC223 {
         return super.approve(_spender, _amount);
     }
 
+    function issue(address _to, uint256 _amount) public auth stoppable {
+        mint(_to, _amount);
+    }
+
+    function destroy(address _from, uint256 _amount) public auth stoppable {
+        // do not require allowance
+
+        _balances[_from] = sub(_balances[_from], _amount);
+        _supply = sub(_supply, _amount);
+        emit Burn(_from, _amount);
+        emit Transfer(_from, 0, _amount);
+    }
+
     function mint(address _guy, uint _wad) auth stoppable {
         super.mint(_guy, _wad);
 
