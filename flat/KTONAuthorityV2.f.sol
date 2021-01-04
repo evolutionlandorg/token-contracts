@@ -1,4 +1,8 @@
-pragma solidity ^0.4.24;
+// hevm: flattened sources of src/KTONAuthorityV2.sol
+pragma solidity >=0.4.24 <0.5.0;
+
+////// src/KTONAuthorityV2.sol
+/* pragma solidity ^0.4.24; */
 
 contract KTONAuthorityV2 {
 
@@ -16,3 +20,4 @@ contract KTONAuthorityV2 {
         return allowList[_src] && _sig == bytes4(keccak256("burn(address,uint256)"));
     }
 }
+
