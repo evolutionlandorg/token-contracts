@@ -4,6 +4,9 @@ Evolution Land ERC20 Token Contracts
 # Dependencies
 run ```npm install evolutionlandcommon ``` to install dependencies
 
+# Darwinia RING and KTON contracts
+https://github.com/darwinia-network/darwinia-bridge-on-ethereum/tree/master/contracts/tokens
+
 # Addresses On Mainnet
 
 ```bash
