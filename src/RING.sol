@@ -22,7 +22,7 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
     }
 
     constructor() public {
-        setName("Evolution Land Global Token");
+        setName("Darwinia Network Native Token");
         controller = msg.sender;
     }
 

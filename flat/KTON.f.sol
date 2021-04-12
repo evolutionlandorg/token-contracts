@@ -517,7 +517,7 @@ contract KTON is DSToken("KTON"), ERC223 {
     address public controller;
 
     constructor() public {
-        setName("Evolution Land Kryptonite");
+        setName("Darwinia Commitment Token");
         controller = msg.sender;
     }
 
@@ -708,3 +708,4 @@ contract KTON is DSToken("KTON"), ERC223 {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint _amount);
 }
+

@@ -543,7 +543,7 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
     }
 
     constructor() public {
-        setName("Evolution Land Global Token");
+        setName("Darwinia Network Native Token");
         controller = msg.sender;
     }
 
@@ -786,3 +786,4 @@ contract RING is DSToken("RING"), ERC223, ISmartToken {
 
     event ClaimedTokens(address indexed _token, address indexed _controller, uint _amount);
 }
+

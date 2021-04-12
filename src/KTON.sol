@@ -10,7 +10,7 @@ contract KTON is DSToken("KTON"), ERC223 {
     address public controller;
 
     constructor() public {
-        setName("Evolution Land Kryptonite");
+        setName("Darwinia Commitment Token");
         controller = msg.sender;
     }
 
