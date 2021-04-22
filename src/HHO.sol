@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
 import "ds-token/token.sol";
-import '../node_modules/evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
-import '../node_modules/evolutionlandcommon/contracts/interfaces/TokenController.sol';
-import '../node_modules/evolutionlandcommon/contracts/interfaces/ApproveAndCallFallBack.sol';
-import '../node_modules/evolutionlandcommon/contracts/interfaces/ERC223.sol';
+import '@evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
+import '@evolutionlandcommon/contracts/interfaces/TokenController.sol';
+import '@evolutionlandcommon/contracts/interfaces/ApproveAndCallFallBack.sol';
+import '@evolutionlandcommon/contracts/interfaces/ERC223.sol';
 
 contract HHO is DSToken("HHO"), ERC223 {
     address public controller;

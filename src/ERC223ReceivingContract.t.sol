@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 import "ds-test/test.sol";
 
 import "./RING.sol";
-import '../node_modules/evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
+import '@evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
 
 contract TokenReceivingEchoDemo {
 
