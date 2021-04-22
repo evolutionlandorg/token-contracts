@@ -4,3 +4,6 @@
 [submodule "lib/ds-token"]
 	path = lib/ds-token
 	url = https://github.com/dapphub/ds-token
+[submodule "lib/common-contracts"]
+	path = lib/common-contracts
+	url = https://github.com/evolutionlandorg/common-contracts
