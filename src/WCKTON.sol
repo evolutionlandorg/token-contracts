@@ -15,11 +15,7 @@
 
 pragma solidity >=0.4.23;
 
-import '@evolutionlandcommon/contracts/interfaces/ApproveAndCallFallBack.sol';
-import '@evolutionlandcommon/contracts/interfaces/ERC223.sol';
-import '@evolutionlandcommon/contracts/interfaces/ERC223ReceivingContract.sol';
-
-contract WCKTON is ERC223 {
+contract WCKTON {
     string  public name            = "Wrapped CKTON";
     string  public symbol          = "WCKTON";
     uint8   public decimals        = 18;
@@ -38,7 +34,7 @@ contract WCKTON is ERC223 {
         require(msg.sender == KTON_PRECOMPILE, "WKTON: PERMISSION");
         totalSupply += value;
         balanceOf[from] += value;
-	emit Transfer(address(0), from, value);
+        emit Transfer(address(0), from, value);
         emit Deposit(from, value);
     }
     function withdraw(bytes32 to, uint wad) public {
@@ -47,7 +43,7 @@ contract WCKTON is ERC223 {
         balanceOf[msg.sender] -= wad;
         bool success = KTON_PRECOMPILE.call(bytes4(keccak256("withdraw(bytes32,uint256)")), to, wad);
         require(success, "WKTON: WITHDRAW_FAILED");
-	emit Transfer(msg.sender, address(0), wad);
+        emit Transfer(msg.sender, address(0), wad);
         emit Withdrawal(to, wad);
     }
 
@@ -82,52 +78,5 @@ contract WCKTON is ERC223 {
         emit Transfer(src, dst, wad);
 
         return true;
-    }
-
-    function approveAndCall(address _spender, uint256 _amount, bytes _extraData)
-		returns (bool success)
-	{
-        if (!approve(_spender, _amount)) revert();
-
-        ApproveAndCallFallBack(_spender).receiveApproval(
-            msg.sender,
-            _amount,
-            this,
-            _extraData
-        );
-
-        return true;
-    }
-
-    function transfer(
-        address _to,
-        uint256 _amount,
-        bytes _data)
-        public
-        returns (bool success)
-    {
-        return transferFrom(msg.sender, _to, _amount, _data);
-    }
-
-    function transferFrom(address _from, address _to, uint256 _amount, bytes _data)
-        public 
-        returns (bool success)
-    {
-        require(transferFrom(_from, _to, _amount));
-        if (isContract(_to)) {
-            ERC223ReceivingContract receiver = ERC223ReceivingContract(_to);
-            receiver.tokenFallback(_from, _amount, _data);
-        }
-        emit ERC223Transfer(_from, _to, _amount, _data);
-        return true;
-    }
-
-    function isContract(address _addr) constant internal returns(bool) {
-        uint size;
-        if (_addr == 0) return false;
-        assembly {
-            size := extcodesize(_addr)
-        }
-        return size>0;
     }
 }
