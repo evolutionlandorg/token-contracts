@@ -1,0 +1,7 @@
+name            ds-token
+description     ERC20 implementation with minting and burning
+version         K99
+
+author          Nikolai Mushegian <nikolai@nexusdev.us>
+author          Daniel Brockman <daniel@brockman.se>
+license         Apache-2.0
