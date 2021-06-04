@@ -106,6 +106,7 @@ contract DSToken is DSMath, DSAuth {
     function mint(address guy, uint wad) public auth stoppable {
         balanceOf[guy] = add(balanceOf[guy], wad);
         totalSupply = add(totalSupply, wad);
+        emit Transfer(address(0), guy, wad);
         emit Mint(guy, wad);
     }
 
@@ -118,6 +119,7 @@ contract DSToken is DSMath, DSAuth {
         require(balanceOf[guy] >= wad, "ds-token-insufficient-balance");
         balanceOf[guy] = sub(balanceOf[guy], wad);
         totalSupply = sub(totalSupply, wad);
+        emit Transfer(guy, address(0), wad);
         emit Burn(guy, wad);
     }
 
