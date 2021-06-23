@@ -19,7 +19,7 @@ contract WCKTON {
     string  public name            = "Wrapped CKTON";
     string  public symbol          = "WCKTON";
     uint8   public decimals        = 18;
-    address public KTON_PRECOMPILE = 0x0000000000000000000000000000000000000016;
+    address public KTON_PRECOMPILE = 0x0000000000000000000000000000000000000015;
 
     event  Approval(address indexed src, address indexed guy, uint wad);
     event  Transfer(address indexed src, address indexed dst, uint wad);
