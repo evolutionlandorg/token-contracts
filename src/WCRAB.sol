@@ -15,9 +15,9 @@
 
 pragma solidity >=0.4.23;
 
-contract WCRING {
-    string public name     = "Wrapped CRING";
-    string public symbol   = "WCRING";
+contract WCRAB {
+    string public name     = "Wrapped CRAB";
+    string public symbol   = "WCRAB";
     uint8  public decimals = 18;
 
     event  Approval(address indexed src, address indexed guy, uint wad);
