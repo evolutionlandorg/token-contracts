@@ -33,14 +33,12 @@ contract WCRAB {
     }
     function deposit() public payable {
         balanceOf[msg.sender] += msg.value;
-        emit Transfer(address(0), msg.sender, msg.value);
         emit Deposit(msg.sender, msg.value);
     }
     function withdraw(uint wad) public {
         require(balanceOf[msg.sender] >= wad);
         balanceOf[msg.sender] -= wad;
         msg.sender.transfer(wad);
-        emit Transfer(msg.sender, address(0), wad);
         emit Withdrawal(msg.sender, wad);
     }
 
